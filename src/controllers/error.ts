@@ -1,13 +1,5 @@
-import { ErrorRequestHandler, NextFunction, Request, Response } from 'express';
-import {
-  CastError,
-  NativeError,
-  MongooseError,
-  CallbackError,
-  Error,
-  ErrorHandlingMiddlewareFunction,
-  ValidatorMessageFn,
-} from 'mongoose';
+import { NextFunction, Request, Response } from 'express';
+import { CastError } from 'mongoose';
 import AppError from '../utils/appError';
 
 interface IError {
@@ -25,12 +17,16 @@ interface IJsonError {
 
 const handleDuplicateFieldsDB = (err: any) => {
   const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
+  console.log(err);
 
-  const message = `Duplicate field value: ${value}. Please use different value`;
+  const message = `El ${
+    Object.keys(err.keyValue)[0]
+  } proporcionado ya existe en otra cuenta: ${value}. Por favor usa otro`;
   return new AppError(message, 400);
 };
 
 const handleCastErrorDB = (err: CastError) => {
+  console.log('casting failed');
   const message = `Invalid ${err.path}: is ${err.value}`;
   return new AppError(message, 400);
 };
@@ -113,6 +109,5 @@ export default (err: any, req: Request, res: Response, next: NextFunction) => {
     if (error.name === 'TokenExpiredError') error = handleJWTExpiredError();
 
     sendErrorProd(error, req, res);
-    // sendErrorDev(err, req, res);
   }
 };

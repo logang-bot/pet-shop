@@ -34,8 +34,8 @@ class handlerFactory {
   };
 
   createOne = async (req: Request, res: Response, next: NextFunction) => {
-    // const newTour = new Tour({})
-    // newTour.save()
+    // const newDocument = new Model({})
+    // newDocument.save()
     this.model.syncIndexes();
     const doc = await this.model.create(req.body);
 
@@ -70,7 +70,7 @@ class handlerFactory {
   getAll = async (req: Request, res: Response, next: NextFunction) => {
     console.log(this);
     this.model.syncIndexes();
-    // To allow for nested GET reviews on tour (hack)
+
     let filter = {};
     if (req.params.tourId) filter = { tour: req.params.tourId };
 
@@ -86,7 +86,7 @@ class handlerFactory {
 
     // const doc = await features.query.explain();
     const doc = await features.query;
-    // const query =  Tour.find()
+    // const query =  Model.find()
     //   .where('duration')
     //   .equals(5)
     //   .where('difficulty')
