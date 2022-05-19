@@ -40,7 +40,7 @@ router.use(catchAsync(authControllers.restricTo('admin')));
 
 router
   .route('/')
-  .get(catchAsync(userControllers.getAll))
+  .get(catchAsync(userControllers.getAll()))
   .post(catchAsync(userControllers.createUser));
 
 router
