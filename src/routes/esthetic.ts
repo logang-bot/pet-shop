@@ -6,7 +6,7 @@ const router = Router();
 
 router
   .route('/')
-  .get(catchAsync(estheticControllers.getAll))
+  .get(catchAsync(estheticControllers.getAll({ path: 'pet' })))
   .post(catchAsync(estheticControllers.createOne));
 
 router

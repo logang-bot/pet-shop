@@ -47,7 +47,7 @@ class handlerFactory {
     });
   };
 
-  getOne = (popOptions?: any) => {
+  getOne = (...popOptions: any) => {
     return async (req: Request, res: Response, next: NextFunction) => {
       let query = await this.model.findById(req.params.id);
       if (popOptions) query = query.populate(popOptions);
@@ -67,39 +67,45 @@ class handlerFactory {
     };
   };
 
-  getAll = async (req: Request, res: Response, next: NextFunction) => {
-    console.log(this);
-    this.model.syncIndexes();
+  getAll = (...popOptions: any) => {
+    return async (req: Request, res: Response, next: NextFunction) => {
+      console.log(this);
+      this.model.syncIndexes();
 
-    let filter = {};
-    if (req.params.tourId) filter = { tour: req.params.tourId };
+      let filter = {};
+      if (req.params.tourId) filter = { tour: req.params.tourId };
 
-    // EXECUTE QUERY
-    const features = new APIFeatures(
-      this.model.find(filter),
-      req.query as IQueryParameters
-    )
-      .filter()
-      .sort()
-      .limitFields()
-      .paginate();
+      // EXECUTE QUERY
+      const features = new APIFeatures(
+        this.model.find(filter),
+        req.query as IQueryParameters
+      )
+        .filter()
+        .sort()
+        .limitFields()
+        .paginate();
 
-    // const doc = await features.query.explain();
-    const doc = await features.query;
-    // const query =  Model.find()
-    //   .where('duration')
-    //   .equals(5)
-    //   .where('difficulty')
-    //   .equals('easy');
+      // const doc = await features.query.explain();
 
-    // SEND RESPONSE
-    return res.status(200).json({
-      status: 'success',
-      results: doc.length,
-      data: {
-        data: doc,
-      },
-    });
+      let doc;
+
+      if (popOptions) doc = await features.query.populate(popOptions);
+      else doc = await features.query;
+      // const query =  Model.find()
+      //   .where('duration')
+      //   .equals(5)
+      //   .where('difficulty')
+      //   .equals('easy');
+
+      // SEND RESPONSE
+      return res.status(200).json({
+        status: 'success',
+        results: doc.length,
+        data: {
+          data: doc,
+        },
+      });
+    };
   };
 }
 

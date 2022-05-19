@@ -6,7 +6,7 @@ const router = Router();
 
 router
   .route('/')
-  .get(catchAsync(productControllers.getAll))
+  .get(catchAsync(productControllers.getAll()))
   .post(catchAsync(productControllers.createOne));
 
 router

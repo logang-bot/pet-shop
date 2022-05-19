@@ -6,7 +6,7 @@ const router = Router();
 
 router
   .route('/')
-  .get(catchAsync(visitControllers.getAll))
+  .get(catchAsync(visitControllers.getAll({ path: 'pet' })))
   .post(catchAsync(visitControllers.createOne));
 
 router

@@ -58,7 +58,7 @@ class UserControllers extends factory {
       );
     }
     // 2) Filtered out unwanted fields names that are not allowed to be updated
-    const filteredBody = filterObj(req.body, 'name', 'email');
+    const filteredBody = filterObj(req.body, 'name', 'email', 'ci');
     if (req.file) filteredBody.photo = req.file.filename;
 
     // 3) Update user document

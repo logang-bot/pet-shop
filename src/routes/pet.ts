@@ -6,7 +6,14 @@ const router = Router();
 
 router
   .route('/')
-  .get(catchAsync(petControllers.getAll))
+  .get(
+    catchAsync(
+      petControllers.getAll({
+        path: 'owner',
+        select: '-dateReg -createdAt -updatedAt -__v',
+      })
+    )
+  )
   .post(catchAsync(petControllers.createOne));
 
 router

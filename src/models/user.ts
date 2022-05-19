@@ -8,35 +8,39 @@ const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, 'Please tell us your name'],
+      required: [true, 'Debe proveer un nombre'],
     },
     ci: {
       type: String,
-      required: [true, 'Please provide your valid CI'],
+      required: [true, 'Debe proveer un CI valido'],
       unique: true,
     },
     email: {
       type: String,
-      required: [true, 'Please provide your email'],
+      required: [true, 'Debe proveer un email'],
       unique: true,
       lowercase: true,
-      validate: [validator.isEmail, 'Please provide a valid email'],
+      validate: [
+        validator.isEmail,
+        'Por favor revise que el email proporcionado sea valido',
+      ],
     },
     password: {
       type: String,
-      required: [true, 'Please provide a password'],
+      required: [true, 'Debe proveer un password'],
       // minlength: 8,
       validate: {
         validator: function (el: string) {
           return el.length >= 8;
         },
-        message: 'Please provide a password with minimum 8 characters length',
+        message:
+          'Por favor asegurese que el password ingresado contenga al menos 8 caracteres',
       },
       select: false,
     },
     passwordConfirm: {
       type: String,
-      required: [true, 'Please confirm your password'],
+      required: [true, 'Por favor confirme su password'],
       validate: {
         // This only works on CREATE and SAVE, NOT in update methods
         validator: function <T extends { password: string }>(el: string) {
@@ -44,7 +48,7 @@ const userSchema = new mongoose.Schema(
           // console.log('this is: ', JSON.stringify(user));
           return el === user.password;
         },
-        message: 'Passwords are not the same',
+        message: 'Los password no son los mismos',
       },
     },
     passwordChangedAt: Date,
@@ -90,11 +94,11 @@ userSchema.pre('save', function (next) {
 });
 
 // The regular expression to find is useful for all queries with 'find' keyword at the beginning
-// userSchema.pre(/^find/, function (next) {
-//   // this points to the current query
-//   this.find({ active: { $ne: false } });
-//   next();
-// });
+userSchema.pre(/^find/, function (next) {
+  // this points to the current query
+  this.find({ active: { $ne: false } });
+  next();
+});
 
 // Regular methods are available in created documents
 userSchema.methods.correctPassword = async function (
@@ -110,9 +114,6 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp: number) {
       (this.passwordChangedAt.getTime() / 1000).toString(),
       10
     );
-    // console.log(this.passwordChangedAt, JWTTimestamp);
-    // console.log(changeTimestamp, JWTTimestamp);
-    // console.log(changeTimestamp < JWTTimestamp);
 
     return JWTTimestamp < changeTimestamp;
   }

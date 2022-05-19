@@ -66,24 +66,25 @@ const sendErrorDev = (err: any, req: Request, res: Response) => {
 
 const sendErrorProd = (err: any, req: Request, res: Response) => {
   // A) API
-  if (req.originalUrl.startsWith('/api')) {
-    // A) Operational, trusted error: send message to client
-    if (err.isOperational) {
-      return res.status(err.statusCode).json({
-        // tojson: JSON.parse(err.message),
-        status: err.status,
-        message: err.message,
-      });
-    }
-    // B) Programming or other unknown error: don't leak error details
-    // 1) Log error
-    console.error("ERROR :'v", err);
-    // 2) Send generic message
-    return res.status(500).json({
-      status: 'error',
-      message: 'Something went very wrong',
+  // if (req.originalUrl.startsWith('/api')) {
+  // A) Operational, trusted error: send message to client
+  if (err.isOperational) {
+    return res.status(err.statusCode).json({
+      // tojson: JSON.parse(err.message),
+      status: err.status,
+      message: err.message,
     });
   }
+  // B) Programming or other unknown error: don't leak error details
+  // 1) Log error
+  console.error("ERROR :'v", err);
+  // 2) Send generic message
+  return res.status(500).json({
+    status: 'error',
+    message: 'Something went very wrong',
+  });
+  // }
+
   // B) Programming or other unknown error: don't leak error details
   // 1) Log error
   console.error("ERROR :'v", err);
@@ -97,6 +98,7 @@ export default (err: any, req: Request, res: Response, next: NextFunction) => {
     sendErrorDev(err, req, res);
   } else if (process.env.NODE_ENV === 'production') {
     // let error = { ...err }; CAUSES BUGS
+    console.log('errooooooooooooooooooor');
     let error = Object.assign(err);
 
     if (error.code === 11000) error = handleDuplicateFieldsDB(error);

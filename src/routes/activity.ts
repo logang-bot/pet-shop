@@ -6,7 +6,7 @@ const router = Router();
 
 router
   .route('/')
-  .get(catchAsync(activityControllers.getAll))
+  .get(catchAsync(activityControllers.getAll()))
   .post(catchAsync(activityControllers.createOne));
 
 router

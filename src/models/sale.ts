@@ -3,7 +3,8 @@ import { Schema, model } from 'mongoose';
 const saleSchema = new Schema({
   quantity: {
     type: Number,
-    required: [true, 'Please provide a valid quantity'],
+    min: 0,
+    required: [true, 'Debe proporcionar una cantidad valida'],
   },
   totalPrice: {
     type: Number,

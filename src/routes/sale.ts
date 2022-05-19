@@ -6,7 +6,9 @@ const router = Router();
 
 router
   .route('/')
-  .get(catchAsync(saleControllers.getAll))
+  .get(
+    catchAsync(saleControllers.getAll({ path: 'product' }, { path: 'client' }))
+  )
   .post(catchAsync(saleControllers.createOne));
 
 router
