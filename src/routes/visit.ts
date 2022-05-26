@@ -11,7 +11,7 @@ router
 
 router
   .route('/:id')
-  .get(catchAsync(visitControllers.getOne()))
+  .get(catchAsync(visitControllers.getOne({ path: 'pet' })))
   .patch(catchAsync(visitControllers.updateOne))
   .delete(catchAsync(visitControllers.deleteOne));
 

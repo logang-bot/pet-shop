@@ -11,7 +11,7 @@ router
 
 router
   .route('/:id')
-  .get(catchAsync(estheticControllers.getOne()))
+  .get(catchAsync(estheticControllers.getOne({ path: 'pet' })))
   .patch(catchAsync(estheticControllers.updateOne))
   .delete(catchAsync(estheticControllers.deleteOne));
 

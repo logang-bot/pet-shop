@@ -18,7 +18,14 @@ router
 
 router
   .route('/:id')
-  .get(catchAsync(petControllers.getOne()))
+  .get(
+    catchAsync(
+      petControllers.getOne({
+        path: 'owner',
+        select: '-dateReg -createdAt -updatedAt -__v',
+      })
+    )
+  )
   .patch(catchAsync(petControllers.updateOne))
   .delete(catchAsync(petControllers.deleteOne));
 
