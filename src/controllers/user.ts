@@ -124,9 +124,45 @@ class UserControllers extends factory {
     createTokenAndSend(newUser, 201, req, res, 'admin');
   }
 
-  // TODO
-  updateOne = async (req: Request, res: Response) => {
-    res.send('esta ruta para administrador aun no esta implementada / update');
+  updateOne = async (req: Request, res: Response, next: NextFunction) => {
+    const filterObj = (
+      obj: { [key: string]: string },
+      ...allowedFields: string[]
+    ) => {
+      const newObj: { [key: string]: string } = {};
+      Object.keys(obj).forEach((el) => {
+        if (allowedFields.includes(el)) newObj[el] = obj[el];
+      });
+      return newObj;
+    };
+    // 1) Create errror if user POSTs password data
+    if (req.body.password || req.body.passwordConfirm) {
+      return next(
+        new AppError(
+          'Esta ruta no es para actualizacion de password. Por favor use /updateMyPaassword',
+          400
+        )
+      );
+    }
+    // 2) Filtered out unwanted fields names that are not allowed to be updated
+    const filteredBody = filterObj(req.body, 'name', 'email', 'ci');
+
+    // 3) Update user document
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      filteredBody,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        user: updatedUser,
+      },
+    });
   };
 }
 
