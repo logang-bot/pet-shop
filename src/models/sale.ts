@@ -15,14 +15,19 @@ const saleSchema = new Schema({
     default: Date.now(),
   },
   product: {
-    type: Schema.Types.ObjectId,
+    type: [Schema.Types.ObjectId],
     ref: 'Product',
-    required: [true, 'Una venta debe tener una referencia al producto vendido'],
+    validate: {
+      message:
+        'Una venta debe tener una referencia a la menos un producto vendido',
+      validator: function (el: any[]) {
+        return el.length > 0;
+      },
+    },
   },
   client: {
     type: Schema.Types.ObjectId,
     ref: 'Client',
-    required: [true, 'Una venta debe tener una referencia al cliente'],
   },
 });
 

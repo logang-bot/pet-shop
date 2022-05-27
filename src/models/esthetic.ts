@@ -25,6 +25,10 @@ const estheticSchema = new Schema({
     type: Date,
     default: Date.now(),
   },
+  detail: {
+    type: String,
+    default: 'No details',
+  },
 });
 
 export default model('Esthetic', estheticSchema);
