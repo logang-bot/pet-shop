@@ -1,8 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
 import { Model } from 'mongoose';
 
+import { Activity } from '../models';
+
 import AppError from '../utils/appError';
 import APIFeatures, { IQueryParameters } from '../utils/apiFeatures';
+import { customRequest } from '../middleware/auth';
 
 class handlerFactory {
   model: Model<any>;
@@ -11,7 +14,7 @@ class handlerFactory {
     this.model = model;
   }
 
-  deleteOne = async (req: Request, res: Response, next: NextFunction) => {
+  deleteOne = async (req: customRequest, res: Response, next: NextFunction) => {
     console.log('DELETING:', req.params.id);
     const doc = await this.model.findByIdAndDelete(req.params.id);
 
@@ -19,10 +22,16 @@ class handlerFactory {
 
     if (!doc) return next(new AppError('No document found with that ID', 404));
 
+    await Activity.create({
+      operation: 'DELETE',
+      user: req.user.id,
+      model: this.model.modelName,
+      activityDate: Date.now(),
+    });
     res.status(204).json({ status: 'success', data: null });
   };
 
-  updateOne = async (req: Request, res: Response, next: NextFunction) => {
+  updateOne = async (req: customRequest, res: Response, next: NextFunction) => {
     const doc = await this.model.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
@@ -30,15 +39,27 @@ class handlerFactory {
 
     if (!doc) return next(new AppError('No document found with that ID', 404));
 
+    await Activity.create({
+      operation: 'UPDATE',
+      user: req.user.id,
+      model: this.model.modelName,
+      activityDate: Date.now(),
+    });
     res.status(200).json({ status: 'success', data: { data: doc } });
   };
 
-  createOne = async (req: Request, res: Response, next: NextFunction) => {
+  createOne = async (req: customRequest, res: Response, next: NextFunction) => {
     // const newDocument = new Model({})
     // newDocument.save()
     this.model.syncIndexes();
     const doc = await this.model.create(req.body);
 
+    await Activity.create({
+      operation: 'CREATE',
+      user: req.user.id,
+      model: this.model.modelName,
+      activityDate: Date.now(),
+    });
     res.status(201).json({
       status: 'success',
       data: {

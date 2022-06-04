@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
 
 const activitySchema = new Schema({
-  accessDate: {
+  activityDate: {
     type: Date,
     required: [true, 'Es necesaria la fecha de acceso del usuario'],
   },
@@ -13,8 +13,8 @@ const activitySchema = new Schema({
   operation: {
     type: String,
     enum: {
-      values: ['Create', 'Delete', 'Update'],
-      message: 'Las operacion permitidas son: Create, Delete, Update',
+      values: ['CREATE', 'DELETE', 'UPDATE'],
+      message: 'Las operacion permitidas son: CREATE, DELETE, UPDATE',
     },
   },
   model: {

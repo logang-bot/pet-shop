@@ -1,8 +1,13 @@
 import { Router } from 'express';
+
 import { saleControllers } from '../controllers';
 import catchAsync from '../utils/catchAsync';
+import auth from '../middleware/auth';
 
 const router = Router();
+
+// Esta ruta protegera todas las rutas en adelante
+router.use(catchAsync(auth));
 
 router
   .route('/')
