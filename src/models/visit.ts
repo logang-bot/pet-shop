@@ -21,22 +21,14 @@ const paramVisitSchema = new Schema({
   },
 });
 
-const antiparasiticSchema = new Schema({
+const medicineSchema = new Schema({
   kind: {
     type: String,
   },
   brand: {
     type: String,
   },
-});
-
-const vaccineSchema = new Schema({
-  // tipo
-  kind: {
-    type: String,
-  },
-  // marca
-  brand: {
+  product: {
     type: String,
   },
 });
@@ -71,13 +63,15 @@ const visitSchema = new Schema(
       type: paramVisitSchema,
       default: () => ({}),
     },
-    antiparasitic: {
-      type: antiparasiticSchema,
-      default: () => ({}),
-    },
-    vaccines: [
+    medicines: [
       {
-        type: vaccineSchema,
+        type: medicineSchema,
+        default: () => ({}),
+      },
+    ],
+    prescription: [
+      {
+        type: medicineSchema,
         default: () => ({}),
       },
     ],

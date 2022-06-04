@@ -9,6 +9,11 @@ const router = Router();
 // Esta ruta protegera todas las rutas en adelante
 router.use(catchAsync(auth));
 
+router.get(
+  'estheticPerPet',
+  catchAsync(estheticControllers.showEstheticPerPet)
+);
+
 router
   .route('/')
   .get(catchAsync(estheticControllers.getAll({ path: 'pet' })))

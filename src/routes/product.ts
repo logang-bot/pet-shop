@@ -9,6 +9,11 @@ const router = Router();
 // Esta ruta protegera todas las rutas en adelante
 router.use(catchAsync(auth));
 
+router.get(
+  '/mostDemandProductsCategory',
+  productControllers.mostDemandProductsCategory
+);
+
 router
   .route('/')
   .get(catchAsync(productControllers.getAll()))

@@ -11,7 +11,9 @@ router.use(catchAsync(auth));
 
 router
   .route('/visitPerClient')
-  .get(catchAsync(visitControllers.visitPerClient));
+  .get(catchAsync(visitControllers.showVisitsPerClient));
+
+router.route('/visitPerPet').get(catchAsync(visitControllers.showVisitsPerPet));
 
 router
   .route('/')

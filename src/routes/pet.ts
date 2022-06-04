@@ -9,6 +9,8 @@ const router = Router();
 // Esta ruta protegera todas las rutas en adelante
 router.use(catchAsync(auth));
 
+router.get('/showPetsByClient', catchAsync(petControllers.showPetsByClient));
+
 router
   .route('/')
   .get(

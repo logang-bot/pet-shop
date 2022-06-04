@@ -9,6 +9,20 @@ const router = Router();
 // Esta ruta protegera todas las rutas en adelante
 router.use(catchAsync(auth));
 
+// Mostrar ventas por cliente
+
+router
+  .route('/showSalesByClient')
+  .get(catchAsync(saleControllers.showSalesByClient));
+
+router
+  .route('/mostDemandProductsCategory')
+  .get(catchAsync(saleControllers.mostDemandProductsCategory));
+
+router
+  .route('/mostDemandProducts')
+  .get(catchAsync(saleControllers.mostDemandProducts));
+
 router
   .route('/')
   .get(
