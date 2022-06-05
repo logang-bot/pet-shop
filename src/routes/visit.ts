@@ -16,6 +16,10 @@ router
 router.route('/visitPerPet').get(catchAsync(visitControllers.showVisitsPerPet));
 
 router
+  .route('/showMedicinesByPet/:idPet')
+  .get(catchAsync(visitControllers.showMedicinesByPet));
+
+router
   .route('/')
   .get(catchAsync(visitControllers.getAll({ path: 'pet' })))
   .post(catchAsync(visitControllers.createOne));

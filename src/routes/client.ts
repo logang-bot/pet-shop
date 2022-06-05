@@ -16,7 +16,9 @@ router
 
 router
   .route('/:id')
-  .get(catchAsync(clientControllers.getOne()))
+  .get(
+    catchAsync(clientControllers.getOne({ path: 'pets' }, { path: 'sales' }))
+  )
   .patch(catchAsync(clientControllers.updateOne))
   .delete(catchAsync(clientControllers.deleteOne));
 

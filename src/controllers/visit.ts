@@ -38,6 +38,28 @@ class VisitControllers extends factory {
 
     res.status(200).json({ status: 'success', data: { finalResult } });
   }
+
+  // Mostrat medicines by pet
+  async showMedicinesByPet(req: Request, res: Response, next: NextFunction) {
+    const idPet = req.params.idPet;
+    const result2 = await Visit.find({ pet: idPet });
+
+    const result = await Visit.aggregate([
+      {
+        $match: { pet: new mongoose.Types.ObjectId(idPet) },
+      },
+      {
+        $group: {
+          _id: '$pet',
+          medicines: { $push: '$medicines' },
+        },
+      },
+    ]);
+
+    result[0].medicines = result[0].medicines.flat();
+
+    res.status(200).json({ status: 'success', data: result });
+  }
 }
 
 export default VisitControllers;

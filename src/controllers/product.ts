@@ -23,29 +23,6 @@ class ProductControllers extends factory {
       },
     ]);
 
-    // const rawProductResult = await Promise.all(
-    //   rawResult.map(async (item) => {
-    //     const prd = await Product.findById(item._id);
-
-    //     return {
-    //       ...item,
-    //       category: prd.category,
-    //     };
-    //   })
-    // );
-
-    // let finalResult: any;
-
-    // rawProductResult.forEach((item) => {
-    //   let aux: {
-    //     [key: string]: any;
-    //   } = {};
-    //   for (const [key, value] of Object.entries(item)) {
-    //     aux[key] = aux[key] + value;
-    //   }
-    //   finalResult.push(aux);
-    // });
-
     res.status(200).json({ status: 'success', data: { rawResult } });
   }
 }

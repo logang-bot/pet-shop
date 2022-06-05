@@ -27,10 +27,14 @@ router
   .route('/:id')
   .get(
     catchAsync(
-      petControllers.getOne({
-        path: 'owner',
-        select: '-dateReg -createdAt -updatedAt -__v',
-      })
+      petControllers.getOne(
+        {
+          path: 'owner',
+          select: '-dateReg -createdAt -updatedAt -__v',
+        },
+        { path: 'visits' },
+        { path: 'esthetics' }
+      )
     )
   )
   .patch(catchAsync(petControllers.updateOne))
