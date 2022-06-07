@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+import { Product } from '.';
 
 const saleSchema = new Schema(
   {
@@ -30,5 +31,16 @@ const saleSchema = new Schema(
     toObject: { virtuals: true },
   }
 );
+
+saleSchema.post('save', async function () {
+  console.log('saving');
+  const idProduct = String(this.product);
+
+  const product = await Product.findById(idProduct);
+
+  product.stock -= this.quantity;
+
+  await product.save();
+});
 
 export default model('Sale', saleSchema);
