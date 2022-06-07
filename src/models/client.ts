@@ -42,6 +42,18 @@ clientSchema.virtual('sales', {
   localField: '_id',
 });
 
+clientSchema.virtual('visits', {
+  ref: 'Visit',
+  foreignField: 'client',
+  localField: '_id',
+});
+
+clientSchema.virtual('esthetics', {
+  ref: 'Esthetic',
+  foreignField: 'client',
+  localField: '_id',
+});
+
 // clientSchema
 //   .virtual('visits')
 //   .get(function (this: { name: string; pets: []; _id: string }) {

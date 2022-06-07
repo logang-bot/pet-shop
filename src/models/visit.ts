@@ -43,6 +43,14 @@ const visitSchema = new Schema(
         'Una visita debe tener una referencia a la mascota examinada',
       ],
     },
+    client: {
+      type: Schema.Types.ObjectId,
+      ref: 'Client',
+      required: [
+        true,
+        'La visita debe tener una referencia al cliente que la efectuo',
+      ],
+    },
     fechaReg: {
       type: Date,
       default: Date.now(),

@@ -9,6 +9,14 @@ const estheticSchema = new Schema({
       'La atencion de estetica debe tener una referencia a la mascota',
     ],
   },
+  client: {
+    type: Schema.Types.ObjectId,
+    ref: 'Client',
+    required: [
+      true,
+      'La atencion de estetica debe tener una referencia al cliente que la efectuo',
+    ],
+  },
   kind: {
     type: String,
   },

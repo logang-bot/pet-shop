@@ -16,12 +16,16 @@ router.get(
 
 router
   .route('/')
-  .get(catchAsync(estheticControllers.getAll({ path: 'pet' })))
+  .get(
+    catchAsync(estheticControllers.getAll({ path: 'pet' }, { path: 'client' }))
+  )
   .post(catchAsync(estheticControllers.createOne));
 
 router
   .route('/:id')
-  .get(catchAsync(estheticControllers.getOne({ path: 'pet' })))
+  .get(
+    catchAsync(estheticControllers.getOne({ path: 'pet' }, { path: 'client' }))
+  )
   .patch(catchAsync(estheticControllers.updateOne))
   .delete(catchAsync(estheticControllers.deleteOne));
 
