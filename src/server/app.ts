@@ -53,7 +53,12 @@ app.use((req, res, next) => {
 app.use('/api', routes);
 
 app.all('*', (req: Request, res: Response, next: NextFunction) => {
-  next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
+  next(
+    new AppError(
+      `No se pudo encontrar ${req.originalUrl} en este servidor`,
+      404
+    )
+  );
 });
 
 app.use(globalErrorHandler);

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "prod": "nodemon src/index.ts",
-    "dev": "NODE_ENV=development nodemon src/index.ts",
+    "dev": "NODE_ENV=production nodemon src/index.ts",
     "start": "node build/src/index.js"
   },
   "author": "",

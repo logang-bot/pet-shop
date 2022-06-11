@@ -33,7 +33,7 @@ const handleCastErrorDB = (err: CastError) => {
 
 const handleValidationErrorDb = (err: IError) => {
   const totalError: IJsonError = {};
-  console.log('da error: jiji', err);
+  console.log(err);
 
   Object.values(err.errors).forEach((el: any) => {
     totalError[el.path] = el.message;
@@ -44,10 +44,13 @@ const handleValidationErrorDb = (err: IError) => {
 };
 
 const handleJWTError = () =>
-  new AppError('Invalid token. Please login again', 401);
+  new AppError('Token invalido, por favor vuelve a logearte al sistema', 401);
 
 const handleJWTExpiredError = () =>
-  new AppError('Your token has expired! Please login again', 401);
+  new AppError(
+    'Tu token a expirado, por favor vuelve a logeart al sistema',
+    401
+  );
 
 const sendErrorDev = (err: any, req: Request, res: Response) => {
   if (req.originalUrl.startsWith('/api')) {
@@ -81,7 +84,7 @@ const sendErrorProd = (err: any, req: Request, res: Response) => {
   // 2) Send generic message
   return res.status(500).json({
     status: 'error',
-    message: 'Something went very wrong',
+    message: 'Algo salio mal',
   });
   // }
 

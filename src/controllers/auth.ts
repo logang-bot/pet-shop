@@ -158,11 +158,10 @@ class AuthControllers {
 
   restricTo(...roles: string[]) {
     return async (req: customRequest, res: Response, next: NextFunction) => {
-      // roles is an array
       if (!roles.includes(req.user.role)) {
         return next(
-          new AppError('You do not have permission to perform this action', 403)
-        ); // 403 means forbidden
+          new AppError('Usted no tiene permisos para realizar esta accion', 403)
+        );
       }
       next();
     };

@@ -20,7 +20,10 @@ class handlerFactory {
 
     console.log(doc);
 
-    if (!doc) return next(new AppError('No document found with that ID', 404));
+    if (!doc)
+      return next(
+        new AppError('No se encontro ningun documento con ese ID', 404)
+      );
 
     await Activity.create({
       operation: 'DELETE',
@@ -37,7 +40,10 @@ class handlerFactory {
       runValidators: true,
     });
 
-    if (!doc) return next(new AppError('No document found with that ID', 404));
+    if (!doc)
+      return next(
+        new AppError('No se encontro ningun documento con ese ID', 404)
+      );
 
     await Activity.create({
       operation: 'UPDATE',
@@ -77,7 +83,9 @@ class handlerFactory {
       // const doc = await this.model.findById(req.params.id).populate('reviews');
 
       if (!doc)
-        return next(new AppError('No document found with that ID', 404));
+        return next(
+          new AppError('No se encontro ningun documento con ese ID', 404)
+        );
 
       res.status(200).json({
         status: 'success',
