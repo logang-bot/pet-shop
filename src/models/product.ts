@@ -18,6 +18,11 @@ const productSchema = new Schema({
     default: 0,
     min: 0,
   },
+  unitsSold: {
+    type: Number,
+    default: 0,
+    min: 0,
+  },
 });
 
 export default model('Product', productSchema);
