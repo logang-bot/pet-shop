@@ -16,6 +16,10 @@ router
 router.route('/visitPerPet').get(catchAsync(visitControllers.showVisitsPerPet));
 
 router
+  .route('/showMostAttendantKind')
+  .get(catchAsync(visitControllers.showMostAttendantKind));
+
+router
   .route('/showMedicinesByPet/:idPet')
   .get(catchAsync(visitControllers.showMedicinesByPet));
 

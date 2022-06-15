@@ -39,7 +39,7 @@ class VisitControllers extends factory {
     res.status(200).json({ status: 'success', data: { finalResult } });
   }
 
-  // Mostrat medicines by pet
+  // Mostrar medicines por mascota
   async showMedicinesByPet(req: Request, res: Response, next: NextFunction) {
     const idPet = req.params.idPet;
     const result2 = await Visit.find({ pet: idPet });
@@ -57,6 +57,25 @@ class VisitControllers extends factory {
     ]);
 
     result[0].medicines = result[0].medicines.flat();
+
+    res.status(200).json({ status: 'success', data: result });
+  }
+
+  // Mostrar especies mas atendidas [BETA]
+  async showMostAttendantKind(req: Request, res: Response, next: NextFunction) {
+    const result = await Pet.aggregate([
+      {
+        $match: {},
+      },
+      {
+        $lookup: {
+          from: 'Visit',
+          localField: 'pet',
+          foreignField: '_id',
+          as: 'visits',
+        },
+      },
+    ]);
 
     res.status(200).json({ status: 'success', data: result });
   }

@@ -16,14 +16,6 @@ router
   .get(catchAsync(saleControllers.showSalesByClient));
 
 router
-  .route('/mostDemandProductsCategory')
-  .get(catchAsync(saleControllers.mostDemandProductsCategory));
-
-router
-  .route('/mostDemandProducts')
-  .get(catchAsync(saleControllers.mostDemandProducts));
-
-router
   .route('/')
   .get(
     catchAsync(saleControllers.getAll({ path: 'product' }, { path: 'client' }))

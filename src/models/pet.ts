@@ -35,10 +35,6 @@ const petSchema = new Schema(
     agresivity: {
       type: Number,
     },
-    lastUpdated: {
-      type: Date,
-      default: Date.now(),
-    },
     dateReg: {
       type: Date,
       default: Date.now(),
@@ -50,6 +46,7 @@ const petSchema = new Schema(
     },
   },
   {
+    timestamps: true,
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
   }

@@ -15,6 +15,10 @@ router.get(
 );
 
 router
+  .route('/mostSoldProducts')
+  .get(catchAsync(productControllers.mostSoldProducts));
+
+router
   .route('/')
   .get(catchAsync(productControllers.getAll()))
   .post(catchAsync(productControllers.createOne));

@@ -13,7 +13,7 @@ class PetControllers extends factory {
       {
         $group: {
           _id: '$owner',
-          numProductsSold: { $sum: 1 },
+          numPets: { $sum: 1 },
         },
       },
     ]);
