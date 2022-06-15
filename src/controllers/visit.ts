@@ -69,10 +69,19 @@ class VisitControllers extends factory {
       },
       {
         $lookup: {
-          from: 'Visit',
-          localField: 'pet',
-          foreignField: '_id',
+          from: 'visits',
+          localField: '_id',
+          foreignField: 'pet',
           as: 'visits',
+        },
+      },
+      {
+        $unwind: '$visits',
+      },
+      {
+        $group: {
+          _id: '$kind',
+          totalVisits: { $sum: 1 },
         },
       },
     ]);
