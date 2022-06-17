@@ -46,7 +46,11 @@ router
 router
   .route('/:id')
   .get(catchAsync(userControllers.getOne()))
-  .patch(catchAsync(userControllers.updateOne))
+  .patch(
+    userControllers.uploadUserPhoto,
+    catchAsync(userControllers.resizeUserPhoto),
+    catchAsync(userControllers.updateOne)
+  )
   .delete(catchAsync(userControllers.deleteOne));
 
 export default router;
