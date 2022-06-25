@@ -3,6 +3,7 @@ import crypto from 'crypto';
 
 import AppError from '../utils/appError';
 import User from '../models/user';
+import Email from '../utils/email';
 
 import { createTokenAndSend } from '../middleware/createToken';
 import { customRequest } from '../middleware/auth';
@@ -30,20 +31,20 @@ class AuthControllers {
   async login(req: Request, res: Response, next: NextFunction) {
     const { email, password } = req.body;
 
-    // 1) Check if email and password exist
+    // 1) Verificar si los campos de email y password estan llenados
     if (!email || !password) {
       return next(
         new AppError('El email y el password no pueden estar vacios', 400)
       );
     }
 
-    // 2) Check if the users exists && password is correct
+    // 2) Verificar si el usuario existe y el password es correcto
     const user = await User.findOne({ email }).select('+password');
 
     if (!user || !(await user.correctPassword(password, user.password)))
       return next(new AppError('El email o el passoword son incorrectos', 401)); // 401 means unathorized
 
-    // 3) If everything ok, send token to client
+    // 3) Si todo esta correcto mandar token al cliente
     createTokenAndSend(user, 200, req, res);
   }
 
@@ -56,9 +57,9 @@ class AuthControllers {
     res.status(200).json({ status: 'success' });
   }
 
-  // [BETA] Controlador para permitir al usuario recordar su password mandando un correo de recuperacion
+  // Controlador para permitir al usuario recordar su password mandando un correo de recuperacion
   async forgotPassword(req: Request, res: Response, next: NextFunction) {
-    // 1) Get user based on POSTed email
+    // 1) Obtener usuario basado en el email enviado
     const user = await User.findOne({ email: req.body.email });
     if (!user)
       return next(
@@ -68,24 +69,16 @@ class AuthControllers {
         )
       );
 
-    // 2) Generate the random reset token
+    // 2) Generar el token de reseteo
     const resetToken = user.createPasswordResetToken();
     await user.save({ validateBeforeSave: false });
 
-    // 3) Send it to user's email
-
-    // const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetURL}.\nIf you didn't forget your password, please ignore this email!`;
-
+    // 3) Enviarlo por email al usuario
     try {
-      // await sendEmail({
-      //   email: user.email,
-      //   subject: 'Your password reset token (valid for 10 min)',
-      //   message,
-      // });
       const resetURL = `${req.protocol}://${req.get(
         'host'
       )}/api/v1/users/resetPassword/${resetToken}`;
-      // await new Email(user, resetURL).sendPasswordReset();
+      await new Email(user, resetURL).sendPasswordReset();
 
       res.status(200).json({
         status: 'success',
@@ -108,7 +101,7 @@ class AuthControllers {
 
   // Controlador para resetear el password
   async resetPassword(req: Request, res: Response, next: NextFunction) {
-    // 1) Get user based on the token
+    // 1) Obtener al usuario basado en el token
     const hashedToken = crypto
       .createHash('sha256')
       .update(req.params.token)
@@ -119,11 +112,11 @@ class AuthControllers {
       passwordResetExpires: { $gt: Date.now() },
     });
 
-    // 2) If token has not expired, and the reis use, se the new password
     if (!user) {
       return next(new AppError('El token es invalido o ha expirado', 400));
     }
 
+    // 2) Si el token no expiro y existe el usuario entonces actualizar el password
     user.password = req.body.password;
     user.passwordConfirm = req.body.passwordConfirm;
     user.passwordResetToken = undefined;
@@ -131,28 +124,27 @@ class AuthControllers {
 
     await user.save();
 
-    // 3) Update changedPasswordAt property for the user
-    // 4) Log the user in, send JWT
+    // 3) Logear al usuario
     createTokenAndSend(user, 200, req, res);
   }
 
   // Controlador para actualizar el passwor de un usuario
   async updatePassword(req: customRequest, res: Response, next: NextFunction) {
-    // 1) Get user from the collection
+    // 1) Obtener al usuario
     const user = await User.findById(req.user.id).select('+password');
-    // 2) Check if POSTed current password is correct
+    // 2) Verificar el password actual
     if (
       !(await user.correctPassword(req.body.passwordCurrent, user.password))
     ) {
       return next(new AppError('Tu password actual es incorrecto', 401));
     }
-    // 3) If so, update password
+    // 3) Actualizar password
     user.password = req.body.password;
     user.passwordConfirm = req.body.passwordConfirm;
     await user.save();
     // User.findByIdAndUpdate will NOT work as intended
 
-    // 4) Log user in, send JWT
+    // 4) Logear al usuario
     createTokenAndSend(user, 200, req, res);
   }
 

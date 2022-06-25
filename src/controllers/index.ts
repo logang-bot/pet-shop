@@ -7,6 +7,7 @@ import PetControllers from './pet';
 import ProductControllers from './product';
 import SaleControllers from './sale';
 import VisitControllers from './visit';
+import StockControllers from './stock';
 
 import {
   Activity,
@@ -17,6 +18,7 @@ import {
   Sale,
   User,
   Visit,
+  Stock,
 } from '../models';
 
 export const authControllers = new AuthControllers();
@@ -29,3 +31,4 @@ export const productControllers = new ProductControllers(Product);
 export const saleControllers = new SaleControllers(Sale);
 export const userControllers = new UserControllers(User);
 export const visitControllers = new VisitControllers(Visit);
+export const stockControllers = new StockControllers(Stock);

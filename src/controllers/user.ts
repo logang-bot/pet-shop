@@ -136,14 +136,15 @@ class UserControllers extends factory {
       return newObj;
     };
     // 1) Create errror if user POSTs password data
-    if (req.body.password || req.body.passwordConfirm) {
-      return next(
-        new AppError(
-          'Esta ruta no es para actualizacion de password. Por favor use /updateMyPaassword',
-          400
-        )
-      );
-    }
+    // if (req.body.password || req.body.passwordConfirm) {
+    //   return next(
+    //     new AppError(
+    //       'Esta ruta no es para actualizacion de password. Por favor use /updateMyPaassword',
+    //       400
+    //     )
+    //   );
+    // }
+
     // 2) Filtered out unwanted fields names that are not allowed to be updated
     const filteredBody = filterObj(req.body, 'name', 'email', 'ci');
     if (req.file) filteredBody.photo = req.file.filename;
@@ -157,6 +158,13 @@ class UserControllers extends factory {
         runValidators: true,
       }
     );
+
+    if (req.body.password) {
+      updatedUser.password = req.body.password;
+      updatedUser.passwordConfirm = req.body.passwordConfirm;
+
+      await updatedUser.save();
+    }
 
     res.status(200).json({
       status: 'success',

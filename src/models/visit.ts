@@ -31,6 +31,9 @@ const medicineSchema = new Schema({
   product: {
     type: String,
   },
+  dose: {
+    type: String,
+  },
 });
 
 const visitSchema = new Schema(

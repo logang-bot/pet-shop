@@ -7,6 +7,7 @@ import petRoutes from './pet';
 import productRoutes from './product';
 import saleRoutes from './sale';
 import visitRoutes from './visit';
+import stockRoutes from './stock';
 
 const router = Router();
 
@@ -18,5 +19,6 @@ router.use('/pet', petRoutes);
 router.use('/product', productRoutes);
 router.use('/sale', saleRoutes);
 router.use('/visit', visitRoutes);
+router.use('/stock', stockRoutes);
 
 export default router;
